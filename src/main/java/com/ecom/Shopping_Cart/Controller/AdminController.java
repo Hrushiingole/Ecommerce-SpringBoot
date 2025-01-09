@@ -5,13 +5,18 @@ import com.ecom.Shopping_Cart.service.CategoryService;
 
 import com.ecom.Shopping_Cart.service.CategoryServiceImpl;
 import jakarta.servlet.http.HttpSession;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 
 @Controller
@@ -39,20 +44,34 @@ public class AdminController {
     }
 
     @PostMapping("/saveCategory")
-    public String saveCategory(@ModelAttribute Category category, HttpSession session){
+    public String saveCategory(@NotNull @ModelAttribute Category category, @RequestParam("file") MultipartFile file, HttpSession session){
 
+            String ImageName=file!=null ? file.getOriginalFilename():"default.jpg";
+            category.setImageName(ImageName);
             if (categoryService.existCategory(category.getName())){
-                session.setAttribute("existCategory","Category already exist");
+                session.setAttribute("errorMsg","Category already exist");
             }else{
                 Category saveCategory = categoryService.saveCategory(category);
                 if (saveCategory==null){
-                    session.setAttribute("saveCategory","Category not saved");
+                    session.setAttribute("errorMsg","Category not saved");
                 }else{
-                    session.setAttribute("saveCategory","Category saved");
+                    try{
+                        File saveFile=new ClassPathResource("static/img").getFile();
+                        Path path=Paths.get(saveFile.getAbsolutePath()+File.separator+"category_img"+File.separator+ImageName);
+                        System.out.println(path);
+                        Files.copy(file.getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+
+                    session.setAttribute("succMsg","Category saved");
                 }
             }
 
-        return "redirect:/category";
+        return "redirect:/admin/category";
     }
 
 

@@ -13,24 +13,32 @@
             <div class="col-md-3">
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
                     <div class="card-header text-center">
-                        Add Category
+                        <p class="fs-4">" Add Category</p>
+                        <th:block th:if="${session.succMsg}">
+                            <p class="text-success fw-bold ">[[${session.succMsg}]]</p>
+                            <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
+                        <th:block th:if="${session.errorMsg}">
+                            <p class="text-danger fw-bold " >[[${session.errorMsg}]]</p>
+                            <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
                     </div>
                     <div class="card-body">
-                        <form>
+                        <form action="/admin/saveCategory" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label>Enter catgory</label>
-                                <input type="text" name="name"class="form-control">
+                                <input type="text" name="name" class="form-control">
                             </div>
                             <div class="mb-3">
                                 <label>Status</label>
                                 <div class="form-check">
-                                    <input checked class="form-check-input" type="checkbox" name="isActive" value="" id="flexCheckDefault">
+                                    <input checked class="form-check-input" type="checkbox" name="isActive"  value="true" id="flexCheckDefault">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Active
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="isActive" value="" id="flexCheckChecked" >
+                                    <input class="form-check-input" type="checkbox" name="isActive" value="false" id="flexCheckChecked" >
                                     <label class="form-check-label" for="flexCheckChecked">
                                         Inactive
                                     </label>
@@ -38,7 +46,7 @@
                             </div>
                             <div class="mb-3">
                                 <label>Upload Image</label>
-                                <input type="file" name="file" class="form-control">
+                                <input type="file"  name="file" class="form-control">
                             </div>
                             <button type="submit" class="btn btn-primary col-md-12 mt-2">Submit</button>
                         </form>
