@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
@@ -27,7 +29,24 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Boolean existCategory(String name){
+    public Boolean existsCategory(String name){
         return categoryRepository.existsByName(name);
+    }
+
+    @Override
+    public Boolean DeleteCategory(int id) {
+        Category category = categoryRepository.findById(id).orElse(null);
+        if(category!=null){
+            categoryRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Category getCategory(int id) {
+       Category category= categoryRepository.findById(id).orElse(null);
+       return category;
+
     }
 }

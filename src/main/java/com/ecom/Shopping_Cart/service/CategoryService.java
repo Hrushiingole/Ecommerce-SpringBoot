@@ -10,7 +10,11 @@ public interface CategoryService  {
 
     public Category saveCategory(Category category);
 
-    public Boolean existCategory(String name);
+    public Boolean existsCategory(String name);
 
     public List<Category> getAllCategory();
+
+    public Boolean DeleteCategory(int id);
+
+    public Category getCategory(int id);
 }

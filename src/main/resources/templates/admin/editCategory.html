@@ -10,10 +10,10 @@
 <section>
     <div class="container-fluid p-5 mt-5">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 offset-md-5">
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
                     <div class="card-header text-center">
-                        <p class="fs-4"> Add Category</p>
+                        <p class="fs-4"> Edit Category</p>
                         <th:block th:if="${session.succMsg}">
                             <p class="text-success fw-bold ">[[${session.succMsg}]]</p>
                             <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
@@ -24,21 +24,23 @@
                         </th:block>
                     </div>
                     <div class="card-body">
-                        <form action="/admin/saveCategory" method="post" enctype="multipart/form-data">
+                        <form action="/admin/updateCategory" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="id" th:value="${category.id}">
                             <div class="mb-3">
                                 <label>Enter catgory</label>
-                                <input type="text" name="name" class="form-control">
+                                <input type="text" name="name" class="form-control" th:value="${category.name}">
                             </div>
                             <div class="mb-3">
                                 <label>Status</label>
+
                                 <div class="form-check">
-                                    <input checked class="form-check-input" type="checkbox" name="isActive"  value="true" id="flexCheckDefault">
+                                    <input checked class="form-check-input" type="checkbox" name="isActive"  value="true" id="flexCheckDefault" th:checked="${category.isActive==true}" >
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Active
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="isActive" value="false" id="flexCheckChecked" >
+                                    <input class="form-check-input" type="checkbox" name="isActive" value="false" id="flexCheckChecked"  th:checked="${category.isActive==false}" >
                                     <label class="form-check-label" for="flexCheckChecked">
                                         Inactive
                                     </label>
@@ -48,6 +50,7 @@
                                 <label>Upload Image</label>
                                 <input type="file"  name="file" class="form-control">
                             </div>
+                            <img th:src="@{'/img/category_img/'+${category.imageName}}" width="100px" height="100px">
                             <button type="submit" class="btn btn-primary col-md-12 mt-2">Submit</button>
                         </form>
                     </div>
@@ -55,44 +58,7 @@
             </div>
 
 
-            <div class="col-md-8">
-             <div class="card ">
-                 <div class="card-header text-center fs-4">Category Details</div>
-                 <div class="card-body">
-                     <table class="table">
-                         <thead>
-                         <tr>
-                             <th scope="col">serial number</th>
-                             <th scope="col">Category</th>
-                             <th scope="col">Status</th>
-                             <th scope="col">Image</th>
-                             <th scope="col">Action</th>
-                         </tr>
-                         </thead>
-                         <tbody>
-                         <tr th:each="category,c: ${categories}">
-                             <th scope="row">[[${c.count}]]</th>
-                             <td>[[${category.name}]]</td>
-                             <td>[[${category.isActive}]]</td>
-                             <td><img th:src="@{'/img/category_img/' + ${category.imageName}}" width="50px" height="50px"></td>
-                             <td>
-                                 <a th:href="@{'/admin/editCategory/' + ${category.id}}" class="btn btn-primary btn-sm">
-                                     <i class="fa-solid fa-pen-to-square fa-1x"></i>
-                                     Edit
-                                 </a>
-                                 <a th:href="@{'/admin/deleteCategory/' + ${category.id}}" class="btn btn-danger btn-sm">
-                                     <i class="fa-solid fa-trash fa-1x"></i>
-                                     Delete
-                                 </a>
-                             </td>
 
-                         </tr>
-
-                         </tbody>
-                     </table>
-                 </div>
-             </div>
-            </div>
         </div>
     </div>
 </section>

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 
 @Controller
@@ -33,13 +35,16 @@ public class AdminController {
         return "admin/index";
     }
     @GetMapping("/loadAddProduct")
-    public String loadAddProductPage(){
+    public String loadAddProductPage(Model m){
+        List<Category> categories=categoryService.getAllCategory();
+        m.addAttribute("categories",categories);
         return "admin/add_product";
     }
 
 
     @GetMapping("/category")
-    public String category(){
+    public String category(Model m){
+        m.addAttribute("categories",categoryService.getAllCategory());
         return "admin/category";
     }
 
@@ -48,7 +53,7 @@ public class AdminController {
 
             String ImageName=file!=null ? file.getOriginalFilename():"default.jpg";
             category.setImageName(ImageName);
-            if (categoryService.existCategory(category.getName())){
+            if (categoryService.existsCategory(category.getName())){
                 session.setAttribute("errorMsg","Category already exist");
             }else{
                 Category saveCategory = categoryService.saveCategory(category);
@@ -72,6 +77,57 @@ public class AdminController {
             }
 
         return "redirect:/admin/category";
+    }
+
+    @GetMapping("/deleteCategory/{id}")
+    public String deleteCategory(@PathVariable int id,HttpSession session){
+        Boolean deleteCategory = categoryService.DeleteCategory(id);
+        if(deleteCategory){
+            session.setAttribute("succMsg","Category deleted");
+        }
+        else{
+            session.setAttribute("errorMsg","Category not deleted");
+        }
+        return "redirect:/admin/category";
+    }
+
+
+    @GetMapping("/editCategory/{id}")
+    public String editCategory(@PathVariable int id,Model m){
+       m.addAttribute("category",categoryService.getCategory(id));
+        return "admin/editCategory";
+
+    }
+
+    @PostMapping("/updateCategory")
+    public String updateCategory(@ModelAttribute Category category,@RequestParam("file") MultipartFile file,HttpSession session){
+        Category oldCategory=categoryService.getCategory(category.getId());
+        String imageName= file.isEmpty() ?oldCategory.getImageName():file.getOriginalFilename();
+        if(oldCategory!=null){
+            oldCategory.setId(category.getId());
+            oldCategory.setName(category.getName());
+            oldCategory.setImageName(imageName);
+
+        }
+        Category upadatedCategory=categoryService.saveCategory(oldCategory);
+        if (upadatedCategory==null){
+            session.setAttribute("errorMsg","Category not updated");
+        }
+        else{
+            if(!file.isEmpty()){
+                try{
+                    File saveFile=new ClassPathResource("static/img").getFile();
+                    Path path=Paths.get(saveFile.getAbsolutePath()+File.separator+"category_img"+File.separator+imageName);
+                    Files.copy(file.getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            session.setAttribute("succMsg","Category updated");
+        }
+        return "redirect:/admin/editCategory/"+category.getId();
     }
 
 
