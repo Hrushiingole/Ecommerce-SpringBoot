@@ -1,9 +1,12 @@
 package com.ecom.Shopping_Cart.Controller;
 
 import com.ecom.Shopping_Cart.model.Category;
+import com.ecom.Shopping_Cart.model.Product;
 import com.ecom.Shopping_Cart.service.CategoryService;
 
 import com.ecom.Shopping_Cart.service.CategoryServiceImpl;
+import com.ecom.Shopping_Cart.service.ProductService;
+import com.ecom.Shopping_Cart.service.ProductServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +27,18 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    private final CategoryServiceImpl categoryService;
 
-    public AdminController(CategoryServiceImpl categoryService) {
-        this.categoryService = categoryService;
-    }
+  private final CategoryServiceImpl categoryService;
+
+  private final ProductServiceImpl productService;
+
+  public AdminController(CategoryServiceImpl categoryService, ProductServiceImpl productService) {
+    this.categoryService = categoryService;
+    this.productService = productService;
+  }
+
+
+
 
     @GetMapping("/")
     public String index(){
@@ -40,6 +50,51 @@ public class AdminController {
         m.addAttribute("categories",categories);
         return "admin/add_product";
     }
+
+    @PostMapping("/saveProduct")
+    public String saveProduct(@ModelAttribute Product product,HttpSession session,@RequestParam("file") MultipartFile image){
+
+        String imageName=image.isEmpty()? "default.jpg":image.getOriginalFilename();
+
+        product.setImage(imageName);
+
+
+
+
+
+        Product saveProduct=productService.saveProduct(product);
+
+        if (saveProduct==null){
+            session.setAttribute("errorMsg","Product not saved");
+        }else {
+            try{
+                File saveFile=new ClassPathResource("static/img").getFile();
+                Path path=Paths.get(saveFile.getAbsolutePath()+File.separator+"product_img"+File.separator+imageName);
+                System.out.println(path);
+                Files.copy(image.getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            session.setAttribute("succMsg","Product saved");
+        }
+        return "redirect:/admin/loadAddProduct";
+    }
+
+    @GetMapping("/products")
+    public String loadViewProduct(Model m){
+
+      return "admin/viewProduct";
+    }
+
+
+
+
+
+
+
+
+//    Category controllers starts
 
 
     @GetMapping("/category")
