@@ -83,11 +83,42 @@ public class AdminController {
 
     @GetMapping("/products")
     public String loadViewProduct(Model m){
-
-      return "admin/viewProduct";
+      m.addAttribute("products",productService.getAllProduct());
+      return "admin/Product";
     }
 
 
+    @GetMapping("/deleteProduct/{id}")
+    public String deleteProduct(@PathVariable int id,HttpSession session){
+        Boolean deleteProduct = productService.deleteProduct(id);
+        if(deleteProduct){
+            session.setAttribute("succMsg","Product deleted");
+        }
+        else{
+            session.setAttribute("errorMsg","Product not deleted");
+        }
+        return "redirect:/admin/products";
+    }
+
+
+    @GetMapping("/editProduct/{id}")
+    public String editProduct(@PathVariable int id,Model m){
+        m.addAttribute("product",productService.getProductById(id));
+        m.addAttribute("categories",categoryService.getAllCategory());
+        return "admin/editProduct";
+    }
+
+    @PostMapping("/updateProduct")
+    public String updateProduct(@ModelAttribute Product product,HttpSession session,@RequestParam("file") MultipartFile image){
+       Product updateProduct = productService.updateProduct(product,image);
+        if (updateProduct==null){
+            session.setAttribute("errorMsg","Product not updated");
+        }
+        else{
+            session.setAttribute("succMsg","Product updated");
+        }
+        return "redirect:/admin/editProduct/"+product.getId();
+    }
 
 
 
