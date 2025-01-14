@@ -2,14 +2,14 @@ package com.ecom.Shopping_Cart.Controller;
 
 import com.ecom.Shopping_Cart.model.Category;
 import com.ecom.Shopping_Cart.model.Product;
-import com.ecom.Shopping_Cart.service.CategoryService;
+
 
 import com.ecom.Shopping_Cart.service.CategoryServiceImpl;
-import com.ecom.Shopping_Cart.service.ProductService;
+
 import com.ecom.Shopping_Cart.service.ProductServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

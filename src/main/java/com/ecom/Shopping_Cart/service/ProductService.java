@@ -1,6 +1,7 @@
 package com.ecom.Shopping_Cart.service;
 
 
+import com.ecom.Shopping_Cart.model.Category;
 import com.ecom.Shopping_Cart.model.Product;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,5 +21,7 @@ public interface ProductService {
     public Product getProductById(int id);
 
     public Product updateProduct(Product product, @RequestParam("file") MultipartFile image);
+
+    public List<Product> getAllActiveProducts();
 
 }

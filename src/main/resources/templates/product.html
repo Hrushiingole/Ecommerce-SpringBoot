@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
 </head>
 <body>
     <section>
@@ -24,106 +25,52 @@
 
         </div>
 
-        <div class="container-fluid mt-1">
+        <div class="container-fluid mt-4">
             <div class="row">
 
-
-                <div class="col-md-2 p-0">
-                    <div class="card shadow p-0 mb-5 bg-body-tertiary rounded">
+                <!-- Categories -->
+                <div class="col-md-2">
+                    <div class="card category-card shadow-sm p-3 mb-5">
                         <div class="card-body">
                             <div class="list-group">
                                 <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                            Categories
+                                    Categories
                                 </a>
-                            <a href="#" class="list-group-item list-group-item-action">Electronics</a>
-                            <a href="#" class="list-group-item list-group-item-action">Mobile Phone</a>
-                            <a href="#" class="list-group-item list-group-item-action">Clothes</a>
-
+                                <a href="#" class="list-group-item list-group-item-action" th:each="category:${categories}">
+                                    [[${category.name}]]
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-
-
+                <!-- Products -->
                 <div class="col-md-10">
-                    <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                    <div class="card shadow-sm p-4 mb-5 bg-body-tertiary rounded">
                         <div class="card-body">
-                            <p class="fs-3 text-center">Products</p>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <div class="card-body ">
-                                            <img src="img/product_img/laptop.jpg" alt="" width="100%" height="100px">
-                                            <p class="fs-5 text-center">laptop</p>
-                                            <div class="row text-center">
-                                                <p class="fs-6 fw-bold">
-                                                    ₹ 500 <span class="fs-6 text-success">20% off</span>
-                                                </p>
-                                                <a class="btn btn-primary col-md-6 offest-md-3">view details</a>
-                                            </div>
-
+                            <p class="fs-3 text-center fw-bold text-primary">Products</p>
+                            <div class="row g-4">
+                                <div class="col-md-3" th:each="product:${products}">
+                                    <div class="card product-card p-3">
+                                        <img th:src="@{'/img/product_img/'+${product.image}}" alt="" class="img-fluid mb-3">
+                                        <p class="fs-5 text-center">[[${product.title}]]</p>
+                                        <div class="row text-center">
+                                            <p class="fs-6 fw-bold">
+                                                <span>₹ [[${product.discountPrice}]]</span>
+                                                <span class="text-decoration-line-through text-secondary">₹ [[${product.price}]]</span>
+                                                <span class="fs-6 text-success">[[${product.discount}]]% off</span>
+                                            </p>
+                                            <a  href="/product" class="btn btn-primary col-md-8 mx-auto">View Details</a>
                                         </div>
                                     </div>
                                 </div>
-<!--                                todo: remove after implementing backend-->
-
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <div class="card-body ">
-                                            <img src="img/product_img/laptop.jpg" alt="" width="100%" height="100px">
-                                            <p class="fs-5 text-center">laptop</p>
-                                            <div class="row text-center">
-                                                <p class="fs-6 fw-bold">
-                                                    ₹ 500 <span class="fs-6 text-success">20% off</span>
-                                                </p>
-                                                <a class="btn btn-primary col-md-6 offest-md-3">view details</a>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <div class="card-body ">
-                                            <img src="img/product_img/laptop.jpg" alt="" width="100%" height="100px">
-                                            <p class="fs-5 text-center">laptop</p>
-                                            <div class="row text-center">
-                                                <p class="fs-6 fw-bold">
-                                                    ₹ 500 <span class="fs-6 text-success">20% off</span>
-                                                </p>
-                                                <a class="btn btn-primary col-md-6 offest-md-3">view details</a>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <div class="card-body ">
-                                            <img src="img/product_img/laptop.jpg" alt="" width="100%" height="100px">
-                                            <p class="fs-5 text-center">laptop</p>
-                                            <div class="row text-center">
-                                                <p class="fs-6 fw-bold">
-                                                    ₹ 500 <span class="fs-6 text-success">20% off</span>
-                                                </p>
-                                                <a class="btn btn-primary col-md-6 offest-md-3">view details</a>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
                             </div>
-
                         </div>
                     </div>
                 </div>
 
             </div>
-        </div>
+        </div>>
 
     </section>
 </body>
