@@ -62,6 +62,13 @@ public class ProductServiceImpl implements ProductService {
         oldProduct.setDescription(product.getDescription());
         String imageName = image.isEmpty() ? oldProduct.getImage() : image.getOriginalFilename();
         oldProduct.setImage(imageName);
+
+        oldProduct.setDiscount(product.getDiscount());
+        Double discount = product.getPrice()*(product.getDiscount()/100.0);
+        Double discountPrice = product.getPrice()-discount;
+        oldProduct.setDiscountPrice(discountPrice);
+
+
         Product upadatedProduct = productRepository.save(oldProduct);
          if(upadatedProduct!=null){
             if(!image.isEmpty()){

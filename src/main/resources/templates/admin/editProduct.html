@@ -10,7 +10,7 @@
 <section>
     <div class="container p-5 mt-3">
         <div class="row">
-            <div class="col-md-6 offset-md-2">
+            <div class="col-md-8 offset-md-2">
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
                     <div class="card-header text-center ">
                         <p class="fs-4">Add Product</p>
@@ -36,20 +36,39 @@
                                 <textarea rows="3" cols="3" class="form-control"  name="description" >[[${product.description}]]</textarea>
 
                             </div>
-                            <div class="mb-3">
-                                <label>Category</label>
-                                <select class="form-control" name="category">
-                                    <option> [[${product.category}]]</option>
-                                    <option   th:each="category:${categories}" >[[${category.name}]]</option>
+                            <div class="row">
 
-                                </select>
 
+                                <div class="mb-3 col">
+                                    <label>Category</label>
+                                    <select class="form-control" name="category">
+                                        <option> [[${product.category}]]</option>
+                                        <option   th:each="category:${categories}" >[[${category.name}]]</option>
+
+                                    </select>
+
+                                </div>
+                                <div class="mb-3 col">
+                                    <label>Enter Price</label>
+                                    <input type="number" name="price" class="form-control" th:value="${product.price}" >
+
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label>Enter Price</label>
-                                <input type="number" name="price" class="form-control" th:value="${product.price}" >
+                            <div class="row">
 
+
+                                <div class="mb-3 col">
+                                    <label>Discount</label>
+                                    <input type="number" name="discount" class="form-control" th:value="${product.discount}" >
+
+                                </div>
+                                <div class="mb-3 col">
+                                    <label>Discount Price</label>
+                                    <input type="number"  class="form-control" th:value="${product.discountPrice}" >
+
+                                </div>
                             </div>
+
                             <div class="row">
                                 <div class="mb-3 col">
                                     <label>Enter Stock</label>
