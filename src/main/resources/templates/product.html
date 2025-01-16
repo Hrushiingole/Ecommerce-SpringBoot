@@ -33,10 +33,11 @@
                     <div class="card category-card shadow-sm p-3 mb-5">
                         <div class="card-body">
                             <div class="list-group">
-                                <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                                    Categories
+                                <p class="fs-5">Categories</p>
+                                <a href="/products" th:classappend="${paramValue==''} ? 'active' :''" class="list-group-item list-group-item-action " aria-current="true">
+                                    All
                                 </a>
-                                <a href="#" class="list-group-item list-group-item-action" th:each="category:${categories}">
+                                <a th:href="@{'/products?category='+${category.name}}"  th:classappend="${paramValue==category.name} ? 'active' :''"  class="list-group-item list-group-item-action" th:each="category:${categories}">
                                     [[${category.name}]]
                                 </a>
                             </div>
@@ -60,7 +61,7 @@
                                                 <span class="text-decoration-line-through text-secondary">₹ [[${product.price}]]</span>
                                                 <span class="fs-6 text-success">[[${product.discount}]]% off</span>
                                             </p>
-                                            <a  href="/product" class="btn btn-primary col-md-8 mx-auto">View Details</a>
+                                            <a  th:href="@{'/product/'+${product.id}}" class="btn btn-primary col-md-8 mx-auto">View Details</a>
                                         </div>
                                     </div>
                                 </div>

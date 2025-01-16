@@ -22,6 +22,6 @@ public interface ProductService {
 
     public Product updateProduct(Product product, @RequestParam("file") MultipartFile image);
 
-    public List<Product> getAllActiveProducts();
+    public List<Product> getAllActiveProducts(String category);
 
 }

@@ -59,6 +59,7 @@ public class ProductServiceImpl implements ProductService {
         oldProduct.setTitle(product.getTitle());
         oldProduct.setCategory(product.getCategory());
         oldProduct.setPrice(product.getPrice());
+        oldProduct.setStock(product.getStock());
         oldProduct.setDescription(product.getDescription());
         String imageName = image.isEmpty() ? oldProduct.getImage() : image.getOriginalFilename();
         oldProduct.setImage(imageName);
@@ -87,8 +88,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getAllActiveProducts() {
-        List<Product> products=productRepository.findByIsActiveTrue();
+    public List<Product> getAllActiveProducts(String category) {
+        List<Product> products=null;
+        if(!category.isEmpty()){
+            products=productRepository.findByCategory(category);
+            return products;
+        }
+        if(category.isEmpty()){
+           products =productRepository.findByIsActiveTrue();
+        }
+
         return products;
     }
 

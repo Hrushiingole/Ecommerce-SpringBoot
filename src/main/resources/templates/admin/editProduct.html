@@ -70,13 +70,18 @@
                             </div>
                             <div class="mb-3">
                                 <label>Status</label>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="isActive" id="inlineRadio1" th:checked="${product.isActive==true}">
-                                    <label class="form-check-label" for="inlineRadio1" >Acitve</label>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" th:checked="${product.isActive==true}"
+                                           value="true" name="isActive" id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Active </label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="isActive" id="inlineRadio2" th:checked="${product.isActive==false}">
-                                    <label class="form-check-label" for="inlineRadio2" >InActive</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="isActive" th:checked="${product.isActive==false}"
+                                           value="false" id="flexRadioDefault2"> <label
+                                        class="form-check-label" for="flexRadioDefault2">
+                                    Inactive </label>
                                 </div>
                             </div>
 
