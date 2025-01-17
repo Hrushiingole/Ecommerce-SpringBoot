@@ -22,12 +22,17 @@
             <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
                 <div class="card-header">
                     <p class="fs-4 text-center">Login</p>
+                    <div th:if="${param.error}" class="alert alert-danger">Invalid username or password
+                    </div>
+                    <div th:if="${param.logout}" class="alert alert-success">You have been logged out
+                    </div>
+
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form action="/login" method="post">
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" placeholder="Email">
+                            <input type="email" name="username" class="form-control" placeholder="Email">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Password</label>
@@ -38,7 +43,7 @@
                 </div>
                 <div class="card-footer text-center">
                     <a href="#" class="text-decoration-none">forgot password</a><br> Don't have an account ?
-                    <a href="#" class="text-decoration-none">Create one</a>
+                    <a href="/register" class="text-decoration-none">Create one</a>
                 </div>
             </div>
         </div>

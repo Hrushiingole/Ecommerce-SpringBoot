@@ -1,96 +1,110 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{base::layout(~{::section})}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="ISO-8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Register</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<!-- Your content here -->
-
+<body class="bg-light">
 <section>
-    <div class="container mt-5 p-5">
-        <div class="row">
-
-
-            <div class="col-md-6 p-5">
-                <img src="img/ecom.png" alt="" width="100%"  height="400px" srcset="">
+    <div class="container my-5">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-5 text-center mb-4">
+                <img alt="E-Commerce Logo" src="img/ecom.png" class="img-fluid rounded shadow-sm" style="max-height: 400px;">
             </div>
-
-            <div class="col-md-6 p-5 mt-3">
-                <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
-                    <div class="card-header">
-                        <p class="fs-4 text-center">Register</p>
+            <div class="col-md-7">
+                <div class="card shadow p-4 border-0 rounded">
+                    <div class="card-header text-center bg-white border-0">
+                        <h2 class="fw-bold text-primary">Register</h2>
+                        <th:block th:if="${session.succMsg}">
+                            <p class="text-success fw-bold mt-3">[[${session.succMsg}]]</p>
+                            <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
+                        <th:block th:if="${session.errorMsg}">
+                            <p class="text-danger fw-bold mt-3">[[${session.errorMsg}]]</p>
+                            <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
                     </div>
                     <div class="card-body">
-                        <form>
-                            <div class="row">
-
-
-                                <div class="row">
-                                    <div class="col">
-                                        <label class="form-label">Full name</label>
-                                        <input type="text" name="name" class="form-control" placeholder="Enter full name">
-                                    </div>
-                                    <div class="col">
-                                        <label class="form-label">Mobile Number</label>
-                                        <input type="number" name="mobileNumber" class="form-control" placeholder="Enter Mobile Number">
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" name="Email" class="form-control" placeholder="Enter Email">
-                                </div>
-
-                                <div class="row">
-                                    <div class="col">
-                                        <label class="form-label">Address</label>
-                                        <input type="text" name="address" class="form-control" placeholder="Enter Address">
-                                    </div>
-                                    <div class="col">
-                                        <label class="form-label">City</label>
-                                        <input type="text" name="city" class="form-control" placeholder="Enter city">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label class="form-label">State</label>
-                                        <input type="text" name="state" class="form-control" placeholder="Enter State">
-                                    </div>
-                                    <div class="col">
-                                        <label class="form-label">Pincode</label>
-                                        <input type="number" name="pincode" class="form-control" placeholder="Enter Pincode">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label class="form-label">Password</label>
-                                        <input type="password" name="password" class="form-control" placeholder="Enter Password">
-                                    </div>
-                                    <div class="col">
-                                        <label class="form-label">Confirm Password</label>
-                                        <input type="password" name="cpassword" class="form-control" placeholder="Enter Confirm Password">
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Profile Image</label>
-                                    <input type="file" name="profile_image" class="form-control">
-                                </div>
-
-
+                        <form action="/saveUser" enctype="multipart/form-data" method="post" class="row g-3">
+                            <!-- Full Name -->
+                            <div class="col-md-6">
+                                <label class="form-label ">Full Name</label>
+                                <input required class="form-control" name="name" type="text" placeholder="Enter your full name">
                             </div>
-                            <button type="submit" class="btn btn-primary text-white col-md-12">Register </button>
+
+                            <!-- Mobile Number -->
+                            <div class="col-md-6">
+                                <label class="form-label ">Mobile Number</label>
+                                <input required class="form-control" name="mobileNumber" type="number" placeholder="Enter your mobile number">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-12">
+                                <label class="form-label ">Email</label>
+                                <input required class="form-control" name="email" type="email" placeholder="Enter your email">
+                            </div>
+
+                            <!-- Address -->
+                            <div class="col-md-6">
+                                <label class="form-label ">Address</label>
+                                <input required class="form-control" name="address" type="text" placeholder="Enter your address">
+                            </div>
+
+                            <!-- City -->
+                            <div class="col-md-6">
+                                <label class="form-label ">City</label>
+                                <input required class="form-control" name="city" type="text" placeholder="Enter your city">
+                            </div>
+
+                            <!-- State -->
+                            <div class="col-md-6">
+                                <label class="form-label ">State</label>
+                                <input required class="form-control" name="state" type="text" placeholder="Enter your state">
+                            </div>
+
+                            <!-- Pincode -->
+                            <div class="col-md-6">
+                                <label class="form-label ">Pincode</label>
+                                <input required class="form-control" name="pincode" type="number" placeholder="Enter your pincode">
+                            </div>
+
+                            <!-- Password -->
+                            <div class="col-md-6">
+                                <label class="form-label ">Password</label>
+                                <input required class="form-control" name="password" type="password" placeholder="Enter your password">
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div class="col-md-6">
+                                <label class="form-label ">Confirm Password</label>
+                                <input required class="form-control" name="cpassword" type="password" placeholder="Re-enter your password">
+                            </div>
+
+                            <!-- Profile Image -->
+                            <div class="col-12">
+                                <label class="form-label ">Profile Image</label>
+                                <input class="form-control" name="img" type="file">
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary w-100 fw-bold">Register</button>
+                            </div>
                         </form>
                     </div>
-                    <div class="card-footer text-center">
-
-                        Have an account ? <a href="/login" class="text-decoration-none">Login</a>
+                    <div class="card-footer text-center bg-white border-0">
+                        <p class="mb-0">Already have an account? <a href="/login" class="text-decoration-none text-primary ">Login</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
