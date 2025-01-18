@@ -31,7 +31,11 @@ public class AuthFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandle
         String email=request.getParameter("username");
         UserDtls user = userRepository.findByEmail(email);
 
-        if (user.getIsEnable()){
+        if (user==null){
+            exception=new LockedException("user not found");
+        }
+
+        else if (user.getIsEnable()){
             if(user.getAccountNonLocked()){
                 if (user.getFailAttempt() < AppConstant.ATTEMPT_TIME){
                     userService.increaseFailedAttempt(user);
