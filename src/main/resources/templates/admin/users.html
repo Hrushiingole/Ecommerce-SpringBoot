@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<section>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+
+
+
+                <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+                    <div class="card-header text-center">
+                        <p class="fs-4">Users</p>
+                        <th:block th:if="${session.succMsg}">
+                            <p class="text-success fw-bold ">[[${session.succMsg}]]</p>
+                            <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
+                        <th:block th:if="${session.errorMsg}">
+                            <p class="text-danger fw-bold " >[[${session.errorMsg}]]</p>
+                            <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Sl No.</th>
+                                <th scope="col">Profile Image</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Mobile Number</th>
+                                <th scope="col">address</th>
+                                <th scope="col">Status</th>
+
+                                <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user,c : ${users}">
+                                <th scope="row">[[${c.count}]]</th>
+
+                                <td><img th:src="@{'/img/profile_img/' + ${user.profileImage}}" width="50px" height="50px"></td>
+                                <td>[[${user.name}]]</td>
+                                <td>[[${user.email}]]</td>
+                                <td>[[${user.mobileNumber}]]</td>
+                                <td>[[${user.address+','+user.city+','+user.state +','+user.pincode}]]</td>
+                                <td>[[${user.isEnable}]]</td>
+                                <td>
+                                    <a
+                                           th:href="@{'/admin/updateStatus?status=true&id=' + ${user.id}}"
+                                           class="btn btn-primary btn-sm">
+
+                                        Acitve
+                                    </a>
+                                    <a th:href="@{'/admin/updateStatus?status=false&id=' + ${user.id}}" class="btn btn-danger btn-sm">
+
+                                        InActive
+                                    </a>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+</body>
+</html>

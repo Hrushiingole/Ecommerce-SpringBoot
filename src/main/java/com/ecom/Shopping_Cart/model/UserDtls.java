@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -38,7 +40,15 @@ public class UserDtls {
     private String password;
 
     private String profileImage;
+
     private String role;
 
+    private Boolean isEnable;
+
+    private Boolean accountLocked;
+
+    private Integer failAttempt;
+
+    private Date lockTime;
 
 }
