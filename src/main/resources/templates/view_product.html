@@ -13,6 +13,37 @@
 
               <div class="col-md-12 p-5">
                   <div class="row">
+                      <!-- Success Toast -->
+                      <th:block th:if="${session.succMsg}">
+                          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                              <div class="toast show bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                                  <div class="toast-header bg-success text-white">
+                                      <strong class="me-auto">Success</strong>
+                                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                                  </div>
+                                  <div class="toast-body">
+                                      [[${session.succMsg}]]
+                                  </div>
+                                  <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                              </div>
+                          </div>
+                      </th:block>
+
+                      <!-- Error Toast -->
+                      <th:block th:if="${session.errorMsg}">
+                          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                              <div class="toast show bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                                  <div class="toast-header bg-danger text-white">
+                                      <strong class="me-auto">Error</strong>
+                                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                                  </div>
+                                  <div class="toast-body">
+                                      [[${session.errorMsg}]]
+                                  </div>
+                                  <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                              </div>
+                          </div>
+                      </th:block>
                   <div class="col-md-6 text-end">
                       <img th:src="@{'/img/product_img/'+${product.image}}" alt="image" width="330px" height="400px" >
                   </div>
@@ -57,17 +88,25 @@
 
                       </div>
 
+
                       <th:block th:if="${product.stock>0}">
-                          <a href="Login.jsp" class="btn btn-danger col-md-12">
-                              Add to Cart
-                          </a>
-                      </th:block>
-                      <th:block th:unless="${product.stock>0}">
-                          <a href="Login.jsp" class="btn text-white btn-warning col-md-12">
-                              Out of stock
-                          </a>
+                          <th:block th:if="${user==null}">
+                              <a href="/signin" class="btn btn-danger col-md-12">Add To
+                                  Cart</a>
+                          </th:block>
+
+                          <th:block th:unless="${user==null}">
+                              <a
+                                      th:href="@{'/user/addCart?pid='+${product.id}+'&uid='+${user.id}}"
+                                      class="btn btn-danger col-md-12">Add To Cart</a>
+                          </th:block>
+
                       </th:block>
 
+                      <th:block th:unless="${product.stock>0}">
+                          <a href="#" class="btn text-white btn-warning col-md-12">Out
+                              of Stock</a>
+                      </th:block>
 
                   </div>
               </div>

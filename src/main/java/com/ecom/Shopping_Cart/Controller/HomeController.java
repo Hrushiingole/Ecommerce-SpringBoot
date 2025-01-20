@@ -55,6 +55,8 @@ public class HomeController {
             String userName=p.getName();
             UserDtls user=userService.getUserByEmail(userName);
             model.addAttribute("user",user);
+        }else{
+            model.addAttribute("user",null);
         }
         List<Category> categories = categoryService.getAllActiveCategory();
         model.addAttribute("categories", categories);
