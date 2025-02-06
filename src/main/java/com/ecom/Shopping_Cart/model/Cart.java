@@ -28,5 +28,8 @@ public class Cart {
     @Transient //doesnt create a column in the database
     private Double totalPrice;
 
+    @Transient
+    private Double totalOrderPrice;
+
 
 }

@@ -10,6 +10,7 @@ import com.ecom.Shopping_Cart.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,6 +56,25 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<Cart> getCartByUser(Integer userId) {
-        return List.of();
+
+        List<Cart> carts=cartRepository.findByUserId(userId);
+
+        Double totalOrderPrice=0.0;
+
+        List<Cart> updatedCart=new ArrayList<>();
+        for(Cart cart:carts){
+            Double totalPrice=cart.getProduct().getDiscountPrice()*cart.getQuantity();
+            cart.setTotalPrice(totalPrice);
+            totalOrderPrice+=totalPrice;
+            cart.setTotalOrderPrice(totalOrderPrice);
+            updatedCart.add(cart);
+        }
+        return updatedCart;
+    }
+
+    @Override
+    public Integer getCountCart(Integer userId) {
+        Integer count=cartRepository.countByUserId(userId);
+        return count;
     }
 }

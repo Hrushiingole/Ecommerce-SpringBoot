@@ -39,7 +39,8 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-
+    @Autowired
+    private  CartService cartService;
 
 
 
@@ -49,6 +50,8 @@ public class AdminController {
             String userName=p.getName();
             UserDtls user=userService.getUserByEmail(userName);
             model.addAttribute("user",user);
+            Integer count=cartService.getCountCart(user.getId());
+            model.addAttribute("countCart",count);
         }
         List<Category> categories = categoryService.getAllActiveCategory();
         model.addAttribute("categories", categories);
