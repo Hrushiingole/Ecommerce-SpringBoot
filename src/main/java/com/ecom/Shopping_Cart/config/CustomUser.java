@@ -11,6 +11,8 @@ import java.util.Collection;
 public class CustomUser implements UserDetails {
 
 
+
+
     private UserDtls user;
 
     public CustomUser(UserDtls user) {

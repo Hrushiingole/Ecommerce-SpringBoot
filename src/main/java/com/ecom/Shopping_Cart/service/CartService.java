@@ -10,4 +10,6 @@ public interface CartService {
     public List<Cart> getCartByUser(Integer userId);
 
     public Integer getCountCart(Integer userId);
+
+    public void updateCartQuantity(String sy, Integer id);
 }
