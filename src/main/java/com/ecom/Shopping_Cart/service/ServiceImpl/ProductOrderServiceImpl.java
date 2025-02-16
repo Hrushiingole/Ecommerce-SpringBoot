@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -66,5 +67,16 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     public List<ProductOrder> getOrderByUser(Integer Uid) {
         List<ProductOrder> productOrders=productOrderRepository.findByUserId(Uid);
         return  productOrders;
+    }
+
+    @Override
+    public Boolean updateOrderStatus(Integer id, String st) {
+      Optional<ProductOrder> productOrder=productOrderRepository.findById(id);
+      if(productOrder.isPresent()){
+          productOrder.get().setStatus(st);
+          productOrderRepository.save(productOrder.get());
+          return true;
+      }
+        return false;
     }
 }

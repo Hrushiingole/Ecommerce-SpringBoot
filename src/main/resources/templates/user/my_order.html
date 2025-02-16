@@ -16,6 +16,14 @@
         <div class="row">
 
             <p class="text-center fs-3  mt-4">My Orders</p>
+            <th:block th:if="${session.succMsg}">
+                <p class="text-success fw-bold mt-3 text-center">[[${session.succMsg}]]</p>
+                <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+            </th:block>
+            <th:block th:if="${session.errorMsg}">
+                <p class="text-danger fw-bold mt-3 text-center">[[${session.errorMsg}]]</p>
+                <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+            </th:block>
             <div class="col-md-12 ">
                 <div class="card">
 
@@ -26,20 +34,27 @@
                         <th scope="col">Order Id</th>
                         <th scope="col">Date</th>
                         <th scope="col">Order Details</th>
-                        <th scope="col">Quantity</th>
                         <th scope="col">Price</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="order: ${orderList}">
-                        <td>[[${order.orderId}]]</td>
+                        <td><b>[[${order.orderId}]]</b></td>
                         <td>[[${order.orderDate}]]</td>
                         <td>[[${order.product.title}]]</td>
-                        <td>[[${order.quantity}]]</td>
-                        <td>[[${order.quantity}]] * [[${order.price}]] = [[${#numbers.formatDecimal(order.quantity * order.price, 1, 2)}]]</td>
-
-                        <td><a th:href="@{/order/cancel/{id}(id=${order.orderId})}" class="btn btn-danger btn-sm">Cancel</a></td>
+                        <td>Quantity : [[${order.quantity}]] <br>Price : [[${order.price}]]  <br>
+                            Total : [[${#numbers.formatDecimal(order.quantity * order.price, 1, 2)}]]</td>
+                        <td>[[${order.status}]]</td>
+                        <td>
+                            <th:block th:if="${order.status!='Cancelled'}">
+                                <a th:href="@{'/user/update-status?id='+${order.id}+'&st=6' }" class="btn btn-danger btn-sm">Cancel</a>
+                            </th:block>
+                            <th:block th:unless="${order.status!='Cancelled'}">
+                                <a href="/" class="btn btn-danger btn-sm disabled" >Cancel</a>
+                            </th:block>
+                            </td>
 
                     </tr>
                     </tbody>

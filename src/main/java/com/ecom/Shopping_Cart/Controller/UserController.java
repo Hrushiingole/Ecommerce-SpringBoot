@@ -4,6 +4,7 @@ package com.ecom.Shopping_Cart.Controller;
 import com.ecom.Shopping_Cart.model.*;
 import com.ecom.Shopping_Cart.service.*;
 import com.ecom.Shopping_Cart.service.ServiceImpl.ProductOrderServiceImpl;
+import com.ecom.Shopping_Cart.utils.OrderStatus;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -121,5 +122,26 @@ public class UserController {
         List<ProductOrder> productOrders=productOrderService.getOrderByUser(getLoggedInUserDetails(p).getId());
         m.addAttribute("orderList",productOrders);
         return "/user/my_order";
+    }
+
+    @GetMapping("/update-status")
+    public String updateOrderStatus(@RequestParam Integer id,@RequestParam Integer st,HttpSession session){
+        OrderStatus[] values = OrderStatus.values();
+        String status =null;
+        for(OrderStatus orderStatus:values){
+            if(orderStatus.getId().equals(st)){
+                status=orderStatus.getName();
+            }
+        }
+        Boolean updateOrder =productOrderService.updateOrderStatus(id,status);
+        if(updateOrder){
+            session.setAttribute("succMsg","Order status updated");
+        }else{
+            session.setAttribute("errorMsg","Something went wrong");
+        }
+
+        return "redirect:/user/user-orders";
+
+
     }
 }
