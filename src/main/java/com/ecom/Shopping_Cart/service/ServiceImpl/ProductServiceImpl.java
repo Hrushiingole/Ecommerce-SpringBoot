@@ -1,8 +1,8 @@
-package com.ecom.Shopping_Cart.service;
+package com.ecom.Shopping_Cart.service.ServiceImpl;
 
 import com.ecom.Shopping_Cart.model.Product;
 import com.ecom.Shopping_Cart.repository.ProductRepository;
-import jakarta.servlet.http.HttpSession;
+import com.ecom.Shopping_Cart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;

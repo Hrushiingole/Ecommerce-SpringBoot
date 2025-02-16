@@ -1,5 +1,6 @@
-package com.ecom.Shopping_Cart.service;
+package com.ecom.Shopping_Cart.service.ServiceImpl;
 
+import com.ecom.Shopping_Cart.service.CommonService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;

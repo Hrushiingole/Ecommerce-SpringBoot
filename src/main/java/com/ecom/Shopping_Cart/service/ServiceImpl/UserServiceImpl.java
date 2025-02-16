@@ -1,6 +1,7 @@
-package com.ecom.Shopping_Cart.service;
+package com.ecom.Shopping_Cart.service.ServiceImpl;
 import com.ecom.Shopping_Cart.model.UserDtls;
 import com.ecom.Shopping_Cart.repository.UserRepository;
+import com.ecom.Shopping_Cart.service.UserService;
 import com.ecom.Shopping_Cart.utils.AppConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

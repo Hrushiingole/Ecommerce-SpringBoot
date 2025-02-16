@@ -1,20 +1,14 @@
 package com.ecom.Shopping_Cart.Controller;
 
 
-import com.ecom.Shopping_Cart.model.Cart;
-import com.ecom.Shopping_Cart.model.Category;
-import com.ecom.Shopping_Cart.model.UserDtls;
-import com.ecom.Shopping_Cart.service.CartService;
-import com.ecom.Shopping_Cart.service.CategoryService;
-import com.ecom.Shopping_Cart.service.UserService;
+import com.ecom.Shopping_Cart.model.*;
+import com.ecom.Shopping_Cart.service.*;
+import com.ecom.Shopping_Cart.service.ServiceImpl.ProductOrderServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -32,6 +26,9 @@ public class UserController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private ProductOrderServiceImpl productOrderService;
 
 
     @GetMapping("/")
@@ -93,7 +90,36 @@ public class UserController {
     }
 
     @GetMapping("/order")
-    public String orderPage(){
+    public String orderPage(Principal p,Model m){
+        UserDtls userDtls=getLoggedInUserDetails(p);
+        List<Cart> carts= cartService.getCartByUser(userDtls.getId());
+        m.addAttribute("carts",carts);
+        if(carts.size()>0){
+            m.addAttribute("orderPrice",carts.get(carts.size()-1).getTotalOrderPrice());
+            m.addAttribute("totalOrderPrice",carts.get(carts.size()-1).getTotalOrderPrice()+250+100);
+        }
+        else{
+            m.addAttribute("totalOrderPrice",0.0);
+        }
         return "/user/order";
+    }
+
+    @PostMapping("/save-order")
+    public String saveOrder(@ModelAttribute OrderRequest orderRequest,Principal p){
+//        System.out.println(orderRequest);
+        UserDtls userDtls=getLoggedInUserDetails(p);
+        productOrderService.saveProductOrder(userDtls.getId(),orderRequest);
+        return "redirect:/user/success";
+    }
+    @GetMapping("/success")
+    public String loadSuccess(){
+        return  "/user/success";
+    }
+
+    @GetMapping("/user-orders")
+    public String myOrders(Model m,Principal p){
+        List<ProductOrder> productOrders=productOrderService.getOrderByUser(getLoggedInUserDetails(p).getId());
+        m.addAttribute("orderList",productOrders);
+        return "/user/my_order";
     }
 }
