@@ -4,13 +4,17 @@ package com.ecom.Shopping_Cart.Controller;
 import com.ecom.Shopping_Cart.model.*;
 import com.ecom.Shopping_Cart.service.*;
 import com.ecom.Shopping_Cart.service.ServiceImpl.ProductOrderServiceImpl;
+import com.ecom.Shopping_Cart.utils.CommonUtil;
 import com.ecom.Shopping_Cart.utils.OrderStatus;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.List;
 
@@ -30,6 +34,9 @@ public class UserController {
 
     @Autowired
     private ProductOrderServiceImpl productOrderService;
+
+    @Autowired
+    private CommonUtil commonUtil;
 
 
     @GetMapping("/")
@@ -125,7 +132,7 @@ public class UserController {
     }
 
     @GetMapping("/update-status")
-    public String updateOrderStatus(@RequestParam Integer id,@RequestParam Integer st,HttpSession session){
+    public String updateOrderStatus(@RequestParam Integer id,@RequestParam Integer st,HttpSession session) throws MessagingException, UnsupportedEncodingException {
         OrderStatus[] values = OrderStatus.values();
         String status =null;
         for(OrderStatus orderStatus:values){
@@ -133,8 +140,14 @@ public class UserController {
                 status=orderStatus.getName();
             }
         }
-        Boolean updateOrder =productOrderService.updateOrderStatus(id,status);
-        if(updateOrder){
+        ProductOrder updateOrder =productOrderService.updateOrderStatus(id,status);
+        try{
+            commonUtil.sendMailForProductOrder(updateOrder,status);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(updateOrder!=null){
             session.setAttribute("succMsg","Order status updated");
         }else{
             session.setAttribute("errorMsg","Something went wrong");
@@ -144,4 +157,26 @@ public class UserController {
 
 
     }
+
+    //profile section
+    @GetMapping("/profile")
+    public String profile(Model m,Principal p){
+        UserDtls userDtls=getLoggedInUserDetails(p);
+        m.addAttribute("user",userDtls);
+        return "/user/profile";
+    }
+
+
+    @PostMapping("/update-profile")
+    public String updateProfile(@ModelAttribute UserDtls user, @RequestParam MultipartFile img,HttpSession session){
+        UserDtls updatedUserProfile=userService.updateUserProfile(user,img);
+        if(updatedUserProfile==null){
+                session.setAttribute("errorMsg","Something went wrong");
+        }
+        else{
+            session.setAttribute("succMsg","Profile updated");
+        }
+        return "redirect:/user/profile";
+    }
+
 }

@@ -7,8 +7,9 @@ import com.ecom.Shopping_Cart.model.ProductOrder;
 import com.ecom.Shopping_Cart.repository.CartRepository;
 import com.ecom.Shopping_Cart.repository.ProductOrderRepository;
 import com.ecom.Shopping_Cart.service.ProductOrderService;
-import com.ecom.Shopping_Cart.service.ProductService;
+import com.ecom.Shopping_Cart.utils.CommonUtil;
 import com.ecom.Shopping_Cart.utils.OrderStatus;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,11 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     @Autowired
     private CartRepository cartRepository;
 
+    @Autowired
+    private CommonUtil commonUtil;
 
+
+    @SneakyThrows
     @Override
     public void saveProductOrder(Integer Uid, OrderRequest orderRequest) {
         List<Cart> cartList = cartRepository.findByUserId(Uid);
@@ -57,8 +62,11 @@ public class ProductOrderServiceImpl implements ProductOrderService {
             orderAddress.setZipCode(orderRequest.getZipCode());
 
             productOrder.setOrderAddress(orderAddress);
-            productOrderRepository.save(productOrder);
+            ProductOrder saveOrder=productOrderRepository.save(productOrder);
 
+
+
+            commonUtil.sendMailForProductOrder(saveOrder,OrderStatus.IN_PROGRESS.getName());
         }
 
     }
@@ -70,13 +78,18 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     }
 
     @Override
-    public Boolean updateOrderStatus(Integer id, String st) {
+    public ProductOrder updateOrderStatus(Integer id, String st) {
       Optional<ProductOrder> productOrder=productOrderRepository.findById(id);
       if(productOrder.isPresent()){
           productOrder.get().setStatus(st);
-          productOrderRepository.save(productOrder.get());
-          return true;
+          ProductOrder productOrder1=productOrderRepository.save(productOrder.get());
+          return productOrder1;
       }
-        return false;
+        return null;
+    }
+
+    @Override
+    public List<ProductOrder> getAllOrders() {
+       return productOrderRepository.findAll();
     }
 }

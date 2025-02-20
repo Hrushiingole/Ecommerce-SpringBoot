@@ -4,11 +4,19 @@ import com.ecom.Shopping_Cart.repository.UserRepository;
 import com.ecom.Shopping_Cart.service.UserService;
 import com.ecom.Shopping_Cart.utils.AppConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -107,5 +115,36 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDtls updateUser(UserDtls userDtls) {
         return userRepository.save(userDtls);
+    }
+
+    @Override
+    public UserDtls updateUserProfile(UserDtls userDtls, MultipartFile img) {
+        UserDtls dbUser=userRepository.findById(userDtls.getId()).get();
+        if(!img.isEmpty()){
+            dbUser.setProfileImage(img.getOriginalFilename());
+        }
+        if (dbUser!=null){
+            dbUser.setName(userDtls.getName());
+            dbUser.setMobileNumber(userDtls.getMobileNumber());
+            dbUser.setAddress(userDtls.getAddress());
+            dbUser.setCity(userDtls.getCity());
+            dbUser.setState(userDtls.getState());
+            dbUser.setPincode(userDtls.getPincode());
+            return userRepository.save(dbUser);
+        }
+
+            try {
+                if(!img.isEmpty()) {
+                    File saveFile = new ClassPathResource("static/img").getFile();
+                    Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "product_img" + File.separator + img.getOriginalFilename());
+//                System.out.println(path);
+                    Files.copy(img.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        return null;
+
     }
 }

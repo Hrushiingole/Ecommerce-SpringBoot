@@ -4,9 +4,12 @@ import com.ecom.Shopping_Cart.model.Category;
 import com.ecom.Shopping_Cart.model.Product;
 
 
+import com.ecom.Shopping_Cart.model.ProductOrder;
 import com.ecom.Shopping_Cart.model.UserDtls;
 import com.ecom.Shopping_Cart.service.*;
 
+import com.ecom.Shopping_Cart.utils.CommonUtil;
+import com.ecom.Shopping_Cart.utils.OrderStatus;
 import jakarta.servlet.http.HttpSession;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +45,11 @@ public class AdminController {
     @Autowired
     private  CartService cartService;
 
+    @Autowired
+private ProductOrderService productOrderService;
 
+    @Autowired
+    private CommonUtil commonUtil;
 
     @ModelAttribute
     public void getUserDetails(Principal p,Model model){
@@ -56,6 +63,8 @@ public class AdminController {
         List<Category> categories = categoryService.getAllActiveCategory();
         model.addAttribute("categories", categories);
     }
+
+
 
 
 
@@ -261,6 +270,41 @@ public class AdminController {
               session.setAttribute("succMsg","User status updated");
           }
           return "redirect:/admin/users";
+
+    }
+
+
+    //order related handling
+
+    @GetMapping("/orders")
+    public String getAllOrders(Model m){
+        m.addAttribute("orderList",productOrderService.getAllOrders());
+        return "/admin/orders";
+    }
+    @PostMapping("/update-order-status")
+    public String updateOrderStatus(@RequestParam Integer id,@RequestParam Integer st,HttpSession session){
+        OrderStatus[] values = OrderStatus.values();
+        String status =null;
+        for(OrderStatus orderStatus:values){
+            if(orderStatus.getId().equals(st)){
+                status=orderStatus.getName();
+            }
+        }
+        ProductOrder updateOrder =productOrderService.updateOrderStatus(id,status);
+        try{
+            commonUtil.sendMailForProductOrder(updateOrder,status);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(updateOrder!=null){
+            session.setAttribute("succMsg","Order status updated");
+        }else{
+            session.setAttribute("errorMsg","Something went wrong");
+        }
+
+        return "redirect:/admin/orders";
+
 
     }
 
