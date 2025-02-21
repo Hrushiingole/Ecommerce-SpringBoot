@@ -9,6 +9,7 @@ import com.ecom.Shopping_Cart.utils.OrderStatus;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,9 @@ public class UserController {
 
     @Autowired
     private CommonUtil commonUtil;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @GetMapping("/")
@@ -177,6 +181,24 @@ public class UserController {
             session.setAttribute("succMsg","Profile updated");
         }
         return "redirect:/user/profile";
+    }
+
+    @PostMapping("/change-password")
+    public  String changePassword(@RequestParam String newPassword,@RequestParam String currentPassword,Principal p,HttpSession session){
+        UserDtls userDtls=getLoggedInUserDetails(p);
+       if(passwordEncoder.matches(currentPassword,userDtls.getPassword())){
+           userDtls.setPassword(passwordEncoder.encode(newPassword));
+           userService.updateUser(userDtls);
+           session.setAttribute("succMsg","Password changed successfully");
+       }
+       else{
+           session.setAttribute("errorMsg","Current password is incorrect");
+       }
+
+
+
+        return "redirect:/user/profile";
+
     }
 
 }

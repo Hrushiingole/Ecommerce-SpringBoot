@@ -130,13 +130,13 @@ public class UserServiceImpl implements UserService {
             dbUser.setCity(userDtls.getCity());
             dbUser.setState(userDtls.getState());
             dbUser.setPincode(userDtls.getPincode());
-            return userRepository.save(dbUser);
+          dbUser=userRepository.save(dbUser);
         }
 
             try {
                 if(!img.isEmpty()) {
                     File saveFile = new ClassPathResource("static/img").getFile();
-                    Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "product_img" + File.separator + img.getOriginalFilename());
+                    Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "profile_img" + File.separator + img.getOriginalFilename());
 //                System.out.println(path);
                     Files.copy(img.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
                 }
@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
                 e.printStackTrace();
             }
 
-        return null;
+        return dbUser;
 
     }
 }
