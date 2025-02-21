@@ -185,7 +185,6 @@ public class HomeController {
         if (user==null){
             model.addAttribute("errorMsg","Invalid Token");
             return "message";
-
         }
         else{
             user.setPassword(passwordEncoder.encode(password));
@@ -195,11 +194,15 @@ public class HomeController {
             model.addAttribute("message","Password reset successfully");
             return "message";
         }
-
-
-
     }
-
+    @GetMapping("/search")
+public String searchProduct(@RequestParam String ch,Model m){
+        List<Product> products=productService.searchProduct(ch);
+        m.addAttribute("products",products);
+        List<Category> categories = categoryService.getAllActiveCategory();
+        m.addAttribute("categories", categories);
+        return "product";
+}
 
 
 
