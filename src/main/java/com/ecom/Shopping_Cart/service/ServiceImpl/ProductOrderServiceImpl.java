@@ -92,4 +92,9 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     public List<ProductOrder> getAllOrders() {
        return productOrderRepository.findAll();
     }
+
+    @Override
+    public ProductOrder getOrderById(String id) {
+        return productOrderRepository.findByOrderId(id);
+    }
 }

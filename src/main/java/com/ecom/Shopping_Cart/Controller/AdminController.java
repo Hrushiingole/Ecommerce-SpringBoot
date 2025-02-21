@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -304,8 +305,21 @@ private ProductOrderService productOrderService;
         }
 
         return "redirect:/admin/orders";
-
-
     }
+
+    @GetMapping("/search-orders")
+    public String searchOrders(@RequestParam String orderId,Model m,HttpSession session){
+        ProductOrder productOrder=productOrderService.getOrderById(orderId);
+        if(productOrder==null){
+            session.setAttribute("errorMsg","Incorrect order id");
+            m.addAttribute("orderList",productOrderService.getAllOrders());
+        }else{
+            List<ProductOrder> orderList=new ArrayList<>();
+            orderList.add(productOrder);
+            m.addAttribute("orderList", orderList);
+        }
+        return "/admin/orders";
+    }
+
 
 }
