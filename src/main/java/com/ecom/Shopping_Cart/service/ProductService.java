@@ -4,6 +4,7 @@ package com.ecom.Shopping_Cart.service;
 import com.ecom.Shopping_Cart.model.Category;
 import com.ecom.Shopping_Cart.model.Product;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,5 +26,7 @@ public interface ProductService {
     public List<Product> getAllActiveProducts(String category);
 
     public List<Product> searchProduct(String ch);
+
+    public Page<Product> getAllActiveProductPagination(Integer pageNo,Integer pageSize,String category);
 
 }

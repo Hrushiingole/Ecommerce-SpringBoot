@@ -5,6 +5,9 @@ import com.ecom.Shopping_Cart.repository.ProductRepository;
 import com.ecom.Shopping_Cart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -105,6 +108,23 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> searchProduct(String ch) {
         List<Product> products=productRepository.findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(ch,ch);
         return products;
+    }
+
+
+//    pagination  code
+    @Override
+    public Page<Product> getAllActiveProductPagination(Integer pageNo, Integer pageSize,String category) {
+
+        Page<Product> pageProduct=null;
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        if(!category.isEmpty()){
+            pageProduct=productRepository.findByCategory(pageable,category);
+
+        }
+        if(category.isEmpty()){
+            pageProduct =productRepository.findByIsActiveTrue(pageable);
+        }
+        return pageProduct;
     }
 
 }

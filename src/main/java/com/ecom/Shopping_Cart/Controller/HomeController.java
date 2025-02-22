@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,14 +88,27 @@ public class HomeController {
     }
 
     @GetMapping("/products")
-    public String products(Model model, @RequestParam(value = "category",defaultValue ="" ) String category) {
-//        System.out.println("category="+category);
+    public String products(Model model, @RequestParam(value = "category",defaultValue ="" ) String category,
+                           @RequestParam(value = "pageNo",defaultValue = "0") Integer page,@RequestParam(value = "pageSize",defaultValue = "1") Integer pageSize){
+
         List<Category> categories = categoryService.getAllActiveCategory();
         model.addAttribute("categories", categories);
-
-        List<Product> products = productService.getAllActiveProducts(category);
-        model.addAttribute("products", products);
         model.addAttribute("paramValue",category);
+
+
+//        List<Product> products = productService.getAllActiveProducts(category);
+
+        Page<Product> products = productService.getAllActiveProductPagination(page ,pageSize,category);
+        List<Product> productList = products.getContent();
+        model.addAttribute("products", productList);
+        model.addAttribute("productSize",productList.size());
+        model.addAttribute("pageNo",products.getNumber());
+        model.addAttribute("totalElements",products.getTotalElements());
+        model.addAttribute("totalPages",products.getTotalPages());
+        model.addAttribute("isFirst",products.isFirst());
+        model.addAttribute("isLast",products.isLast());
+        model.addAttribute("pageSize",pageSize);
+
 
         return "product";
     }
