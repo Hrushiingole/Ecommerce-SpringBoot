@@ -90,7 +90,31 @@
                                 </tr>
                                 </tbody>
                             </table>
-                        </div> <!-- End Table Responsive -->
+                        </div>
+                        <!-- End Table Responsive -->
+                        <div class="row">
+                            <div class="col-md-4">Total Products : [[${totalElements}]]</div>
+                            <div class="col-md-6">
+                                <th:block th:if="${totalPages>0}">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <li class="page-item">
+                                                <a class="page-link" th:href="@{'/admin/products?pageNo='+${pageNo-1}}" th:classappend="${pageNo==0} ? 'disabled' :''" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item" th:each="i:${#numbers.sequence(1,totalPages)}" th:classappend="${i==pageNo+1} ? 'active' :''"><a class="page-link" th:href="@{'/admin/products?pageNo='+${i-1}}">[[${i}]]</a></li>
+
+                                            <li class="page-item">
+                                                <a class="page-link" th:href="@{'/admin/products?pageNo='+${pageNo+1}}" th:classappend="${pageNo+1==totalPages} ? 'disabled' :''" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </th:block>
+                            </div>
+                        </div>
                     </div> <!-- End Card Body -->
                 </div> <!-- End Card -->
             </div>

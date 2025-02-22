@@ -110,8 +110,22 @@ public class ProductServiceImpl implements ProductService {
         return products;
     }
 
+    @Override
+    public Page<Product> searchProductPagination(Integer pageNo, Integer pageSize, String ch) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Product> pageProduct=productRepository.findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(ch,ch,pageable);
+        return pageProduct;
+    }
 
-//    pagination  code
+    @Override
+    public Page<Product> getAllProductPagination(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Product> pageProduct=productRepository.findAll(pageable);
+        return pageProduct;
+    }
+
+
+    //    pagination  code
     @Override
     public Page<Product> getAllActiveProductPagination(Integer pageNo, Integer pageSize,String category) {
 

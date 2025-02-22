@@ -21,4 +21,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(String ch,String ch2);
 
+    Page<Product> findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(String ch, String ch1, Pageable pageable);
 }

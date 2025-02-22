@@ -11,6 +11,9 @@ import com.ecom.Shopping_Cart.utils.CommonUtil;
 import com.ecom.Shopping_Cart.utils.OrderStatus;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -91,6 +94,13 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     @Override
     public List<ProductOrder> getAllOrders() {
        return productOrderRepository.findAll();
+    }
+
+    @Override
+    public Page<ProductOrder> getAllOrdersPagination(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<ProductOrder> pageProduct=productOrderRepository.findAll(pageable);
+        return pageProduct;
     }
 
     @Override

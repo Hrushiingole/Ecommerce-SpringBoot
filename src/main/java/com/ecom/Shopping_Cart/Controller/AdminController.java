@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -109,16 +110,34 @@ private ProductOrderService productOrderService;
     }
 
     @GetMapping("/products")
-    public String loadViewProduct(Model m,@RequestParam(defaultValue = "") String ch){
-        List<Product> products=null;
+    public String loadViewProduct(Model m,@RequestParam(defaultValue = "") String ch,@RequestParam(defaultValue = "0",name="pageNo") Integer page,@RequestParam(defaultValue = "2",name="pageSize") Integer size){
+//        List<Product> products=null;
+//        if(ch!=null && ch.length()>0){
+//            products=productService.searchProduct(ch);
+//        }
+//        else{
+//            products=productService.getAllProduct();
+//        }
+//        m.addAttribute("products",products);
+
+        Page<Product> pages=null;
         if(ch!=null && ch.length()>0){
-            products=productService.searchProduct(ch);
+            pages=productService.searchProductPagination(page,size,ch);
         }
         else{
-            products=productService.getAllProduct();
+            pages=productService.getAllProductPagination(page,size);
         }
-        m.addAttribute("products",products);
-      return "admin/Product";
+        m.addAttribute("products",pages.getContent());
+
+        m.addAttribute("pageSize", size);
+        m.addAttribute("pageNo",pages.getNumber());
+        m.addAttribute("totalElements",pages.getTotalElements());
+        m.addAttribute("totalPages",pages.getTotalPages());
+        m.addAttribute("isFirst",pages.isFirst());
+        m.addAttribute("isLast",pages.isLast());
+
+
+        return "admin/Product";
     }
 
 
@@ -170,8 +189,19 @@ private ProductOrderService productOrderService;
 
 
     @GetMapping("/category")
-    public String category(Model m){
-        m.addAttribute("categories",categoryService.getAllCategory());
+    public String category(Model model,@RequestParam(defaultValue = "0",name="pageNo") Integer page,@RequestParam(defaultValue = "3",name="pageSize") Integer size){
+//        m.addAttribute("categories",categoryService.getAllCategory());
+    Page<Category> categoryPage=categoryService.getAllActiveCategoryPagination(page,size);
+        List<Category> categoryList = categoryPage.getContent();
+        model.addAttribute("categories", categoryList);
+        model.addAttribute("pageSize",categoryList.size());
+        model.addAttribute("pageNo",categoryPage.getNumber());
+        model.addAttribute("totalElements",categoryPage.getTotalElements());
+        model.addAttribute("totalPages",categoryPage.getTotalPages());
+        model.addAttribute("isFirst",categoryPage.isFirst());
+        model.addAttribute("isLast",categoryPage.isLast());
+
+
         return "admin/category";
     }
 
@@ -285,8 +315,21 @@ private ProductOrderService productOrderService;
     //order related handling
 
     @GetMapping("/orders")
-    public String getAllOrders(Model m){
-        m.addAttribute("orderList",productOrderService.getAllOrders());
+    public String getAllOrders(Model m,@RequestParam(defaultValue = "0",name="pageNo") Integer pageNo,@RequestParam(defaultValue = "2",name="pageSize") Integer size){
+
+        Page<ProductOrder> page=productOrderService.getAllOrdersPagination(pageNo,size);
+
+        m.addAttribute("orderList",page.getContent());
+
+
+
+
+        m.addAttribute("pageSize",size);
+        m.addAttribute("pageNo",page.getNumber());
+        m.addAttribute("totalElements",page.getTotalElements());
+        m.addAttribute("totalPages",page.getTotalPages());
+        m.addAttribute("isFirst",page.isFirst());
+        m.addAttribute("isLast",page.isLast());
         return "/admin/orders";
     }
     @PostMapping("/update-order-status")
@@ -310,6 +353,8 @@ private ProductOrderService productOrderService;
         }else{
             session.setAttribute("errorMsg","Something went wrong");
         }
+
+
 
         return "redirect:/admin/orders";
     }
