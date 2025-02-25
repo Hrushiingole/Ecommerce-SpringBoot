@@ -28,4 +28,6 @@ public interface UserService {
 
     public UserDtls updateUser(UserDtls userDtls);
     public UserDtls updateUserProfile(UserDtls userDtls, MultipartFile img);
+
+    UserDtls saveAdmin(UserDtls userDtls);
 }

@@ -20,9 +20,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
+
+                    <li class="nav-item"  th:if="${user == null or user.role != 'ROLE_ADMIN'}">
                         <a class="nav-link active" aria-current="page" href="/"><i class="fa-solid fa-house"></i>Home</a>
                     </li>
+                    <li class="nav-item"  th:if="${user != null and user.role == 'ROLE_ADMIN'}">
+                        <a class="nav-link active" aria-current="page" href="/admin/">DashBoard</a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/products">Products</a>
                     </li>
@@ -48,9 +53,6 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/register">REGISTER</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">ADMIN</a>
-                        </li>
                     </th:block>
                     <th:block th:if="${user!=null}">
                         <th:block th:if="${user.role=='ROLE_USER'}" >
@@ -64,8 +66,9 @@
                                 <i class="fa-solid fa-user"></i>  [[${user.name}]]
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
-                                <li><a class="dropdown-item" href="/user/user-orders">My Orders </a></li>
+                                <li th:if="${user.role=='ROLE_USER'}"><a class="dropdown-item" href="/user/profile">Profile</a></li>
+                                <li th:if="${user.role=='ROLE_ADMIN'}"><a class="dropdown-item" href="/admin/profile">Profile</a></li>
+                                <li th:if="${user.role=='ROLE_USER'}"><a class="dropdown-item" href="/user/user-orders">My Orders </a></li>
                                 <li><a class="dropdown-item" href="/logout">Log Out </a></li>
                             </ul>
                         </li>

@@ -12,11 +12,15 @@
         <div class="row">
             <div class="col-md-12">
 
-
+                <a href="/admin/" class="btn btn-secondary btn-sm mb-3">
+                    <i class="fa-solid fa-arrow-left"></i> Back
+                </a>
 
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+
                     <div class="card-header text-center">
-                        <p class="fs-4">Users</p>
+                        <p class="fs-4" th:if="@{type==1}">Users</p>
+                        <p class="fs-4" th:if="@{type==2}">Admin</p>
                         <th:block th:if="${session.succMsg}">
                             <p class="text-success fw-bold ">[[${session.succMsg}]]</p>
                             <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
@@ -53,12 +57,12 @@
                                 <td>[[${user.isEnable}]]</td>
                                 <td>
                                     <a
-                                           th:href="@{'/admin/updateStatus?status=true&id=' + ${user.id}}"
+                                           th:href="@{'/admin/updateStatus?status=true&id=' + ${user.id}+'&type='+${type}}"
                                            class="btn btn-primary btn-sm">
 
                                         Acitve
                                     </a>
-                                    <a th:href="@{'/admin/updateStatus?status=false&id=' + ${user.id}}" class="btn btn-danger btn-sm">
+                                    <a th:href="@{'/admin/updateStatus?status=false&id=' + ${user.id} +'&type='+${type}}" class="btn btn-danger btn-sm">
 
                                         InActive
                                     </a>

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,9 @@ private ProductOrderService productOrderService;
 
     @Autowired
     private CommonUtil commonUtil;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @ModelAttribute
     public void getUserDetails(Principal p,Model model){
@@ -292,13 +296,21 @@ private ProductOrderService productOrderService;
 
 
     @GetMapping("/users")
-    public String getAllUsers(Model m){
-        m.addAttribute("users",userService.getAllUsers("ROLE_USER"));
+    public String getAllUsers(Model m,@RequestParam Integer type ){
+        List<UserDtls> users=null;
+
+        if (type==1){
+            users=userService.getAllUsers("ROLE_USER");
+        }else{
+            users=userService.getAllUsers("ROLE_ADMIN");
+        }
+        m.addAttribute("users",users);
+        m.addAttribute("type",type);
         return "/admin/users";
     }
 
     @GetMapping("/updateStatus")
-    public String updateUserAccountStatus(@RequestParam Boolean status,@RequestParam Integer id,HttpSession session){
+    public String updateUserAccountStatus(@RequestParam String type,@RequestParam Boolean status,@RequestParam Integer id,HttpSession session){
           Boolean f = userService.updateUserAccountStatus(status,id);
           if (f==false){
               session.setAttribute("errorMsg","Something went wrong");
@@ -307,7 +319,7 @@ private ProductOrderService productOrderService;
           else{
               session.setAttribute("succMsg","User status updated");
           }
-          return "redirect:/admin/users";
+          return "redirect:/admin/users?type="+type;
 
     }
 
@@ -373,7 +385,71 @@ private ProductOrderService productOrderService;
         return "/admin/orders";
     }
 
+//add admin
+
+    @GetMapping("/add-admin")
+    public String addAdmin(Model m){
+//        m.addAttribute("user",new UserDtls());
+        return "/admin/add_admin";
+    }
+    @PostMapping("/save-admin")
+    public String saveAdmin(@ModelAttribute UserDtls userDtls,HttpSession session){
+        String email=userDtls.getEmail();
+        boolean isExist=userService.getUserByEmail(email)!=null;
+        if(isExist){
+            session.setAttribute("errorMsg","Email already exist");
+            return "redirect:/admin/add-admin";
+        }
+
+        UserDtls saveAdmin=userService.saveAdmin(userDtls);
+        if(saveAdmin==null){
+            session.setAttribute("errorMsg","Something went wrong");
+        }else{
+            session.setAttribute("succMsg","Admin saved");
+        }
+        return "redirect:/admin/add-admin";
+    }
+
+    @GetMapping("/profile")
+    public String profile(Model m,Principal p){
+        UserDtls user=getLoggedInUserDetails(p);
+        m.addAttribute("user",user);
+        return "/admin/profile";
+    }
+
+    @PostMapping("/update-profile")
+    public String updateProfile(@ModelAttribute UserDtls user, @RequestParam MultipartFile img,HttpSession session){
+        UserDtls updatedUserProfile=userService.updateUserProfile(user,img);
+        if(updatedUserProfile==null){
+            session.setAttribute("errorMsg","Something went wrong");
+        }
+        else{
+            session.setAttribute("succMsg","Profile updated");
+        }
+        return "redirect:/admin/profile";
+    }
+    private UserDtls getLoggedInUserDetails(Principal p) {
+        String email=p.getName();
+        UserDtls user=userService.getUserByEmail(email);
+        return user;
+    }
+
+    @PostMapping("/change-password")
+    public  String changePassword(@RequestParam String newPassword,@RequestParam String currentPassword,Principal p,HttpSession session){
+        UserDtls userDtls=getLoggedInUserDetails(p);
+        if(passwordEncoder.matches(currentPassword,userDtls.getPassword())){
+            userDtls.setPassword(passwordEncoder.encode(newPassword));
+            userService.updateUser(userDtls);
+            session.setAttribute("succMsg","Password changed successfully");
+        }
+        else{
+            session.setAttribute("errorMsg","Current password is incorrect");
+        }
 
 
+
+        return "redirect:/admin/profile";
+
+    }
 
 }

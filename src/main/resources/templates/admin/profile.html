@@ -17,6 +17,9 @@
 
 
             <div class="col-md-10 offset-md-1">
+                <a href="/admin/" class="btn btn-secondary btn-sm mb-3">
+                    <i class="fa-solid fa-arrow-left"></i> Back
+                </a>
 
                     <p class="fs-3 text-center ">My profile</p>
                 <th:block th:if="${session.succMsg}">
@@ -35,7 +38,7 @@
                         <table class="table table-borderless">
 
                             <tbody>
-                            <form action="/user/update-profile" method="post" enctype="multipart/form-data">
+                            <form action="/admin/update-profile" method="post" enctype="multipart/form-data">
 
 
                                 <tr>
@@ -81,7 +84,7 @@
                                 <tr>
                                     <th scope="row">Role</th>
                                     <td>:</td>
-                                    <td><input type="text" name=""  readonly class="form-control" th:value="${user.role}"></td>
+                                    <td><input type="text" name="" readonly class="form-control" th:value="${user.role}"></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Account Status</th>
@@ -113,7 +116,7 @@
                     <table class="table table-borderless">
 
                         <tbody>
-                            <form method="post" action="/user/change-password">
+                            <form method="post" action="/admin/change-password">
                                 <tr>
                                     <th scope="row">Current Password</th>
                                     <td>:</td>

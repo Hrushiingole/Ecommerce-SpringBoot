@@ -76,6 +76,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String index() {
+
+
         return "index";
     }
     @GetMapping("/signin")
@@ -98,7 +100,12 @@ public class HomeController {
 
 //        List<Product> products = productService.getAllActiveProducts(category);
 
-        Page<Product> products = productService.getAllActiveProductPagination(page ,pageSize,category);
+
+
+        Page<Product> products=productService.getAllActiveProductPagination(page,pageSize,category);
+
+
+
         List<Product> productList = products.getContent();
         model.addAttribute("products", productList);
         model.addAttribute("productSize",productList.size());
