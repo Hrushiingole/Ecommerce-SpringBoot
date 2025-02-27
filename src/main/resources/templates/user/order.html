@@ -4,152 +4,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Order Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-<!-- Your content here -->
 <section>
-
-    <div class="container mt-5 p-5">
-        <div class="row">
-            <form action="/user/save-order" method="post">
-            <div class="col-md-6 p-5 mt-3 container d-flex ">
-                <div class="card shadow-lg p-4 w-80">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg p-4">
                     <h3 class="text-center mb-4">Fill Your Details</h3>
-
-
+                    <form action="/user/save-order" method="post" id="orders" novalidate>
                         <div class="row g-3">
                             <!-- First Name -->
                             <div class="col-md-6">
+                                <label class="form-label">First Name</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-user"></i></span>
-                                    <input type="text" class="form-control" name="firstName" required placeholder="First Name">
+                                    <input type="text" class="form-control" name="firstName" placeholder="First Name">
                                 </div>
+                                <small class="text-danger d-block mt-1">First name is required</small>
                             </div>
 
                             <!-- Last Name -->
                             <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-user"></i></span>
-                                    <input type="text" class="form-control" name="lastName" required placeholder="Last Name">
+                                    <input type="text" class="form-control" name="lastName" placeholder="Last Name">
                                 </div>
+                                <small class="text-danger d-block mt-1">Last name is required</small>
                             </div>
 
                             <!-- Email -->
                             <div class="col-md-6">
+                                <label class="form-label">Email</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-envelope"></i></span>
-                                    <input type="email" class="form-control" name="Email" required placeholder="Email">
+                                    <input type="email" class="form-control" name="Email" placeholder="Email">
                                 </div>
+                                <small class="text-danger d-block mt-1">Email is required</small>
                             </div>
 
                             <!-- Mobile Number -->
                             <div class="col-md-6">
+                                <label class="form-label">Mobile Number</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-phone"></i></span>
-                                    <input type="number" class="form-control" name="mobileNumber" required placeholder="Mobile Number">
+                                    <input type="number" class="form-control" name="mobileNumber" placeholder="Mobile Number">
                                 </div>
+                                <small class="text-danger d-block mt-1">Mobile number is required</small>
                             </div>
 
                             <!-- Address -->
                             <div class="col-md-12">
+                                <label class="form-label">Address</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
-                                    <input type="textarea" class="form-control" name="address" required placeholder="Address">
+                                    <input type="text" class="form-control" name="address" placeholder="Address">
                                 </div>
+                                <small class="text-danger d-block mt-1">Address is required</small>
                             </div>
 
                             <!-- City -->
                             <div class="col-md-6">
+                                <label class="form-label">City</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-city"></i></span>
-                                    <input type="text" class="form-control" name="city" required placeholder="City">
+                                    <input type="text" class="form-control" name="city" placeholder="City">
                                 </div>
+                                <small class="text-danger d-block mt-1">City is required</small>
                             </div>
 
                             <!-- State -->
                             <div class="col-md-6">
+                                <label class="form-label">State</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-flag"></i></span>
-                                    <input type="text" class="form-control" name="state" required placeholder="State">
+                                    <input type="text" class="form-control" name="state" placeholder="State">
                                 </div>
+                                <small class="text-danger d-block mt-1">State is required</small>
                             </div>
 
                             <!-- Pincode -->
                             <div class="col-md-6">
+                                <label class="form-label">Pincode</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-location-dot"></i></span>
-                                    <input type="number" class="form-control" name="zipCode" required placeholder="Pincode">
+                                    <input type="number" class="form-control" name="zipCode" placeholder="Pincode">
                                 </div>
+                                <small class="text-danger d-block mt-1">Pincode is required</small>
                             </div>
-
-
                         </div>
 
-                </div>
-            </div>
+                        <h3 class="fs-4 text-center mt-4">Payment Type</h3>
+                        <hr>
 
-
-
-            <div class="col-md-6 p-5 mt-3">
-
-
-                    <h3 class="fs-4 text-center">Payment Type</h3>
-                <hr>
-
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <table class="table table-borderless">
-                                <tbody>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <table class="table table-borderless">
+                                    <tbody>
                                     <tr>
                                         <td>Total Price</td>
-                                        <td >₹ [[${orderPrice}]]</td>
+                                        <td>₹ [[${orderPrice}]]</td>
                                     </tr>
                                     <tr>
                                         <td>Delivery Price</td>
-                                        <td >₹ 250</td>
+                                        <td>₹ 250</td>
                                     </tr>
                                     <tr>
                                         <td>Tax Amount</td>
-                                        <td >₹ 100</td>
+                                        <td>₹ 100</td>
                                     </tr>
                                     <tr class="border-top">
                                         <td>Total Price</td>
-                                        <td >₹ [[${totalOrderPrice}]]</td>
+                                        <td>₹ [[${totalOrderPrice}]]</td>
                                     </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-                        <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
-                    <div class="card-body">
-
-                            <div class="mb-3">
-                                <label class="form-label">Select Payment Type</label>
-                                <select class="form-control"  required name="paymentType">
-                                    <option value="">--select--</option>
-                                    <option value="ONLINE">Online Payment</option>
-                                    <option value="COD">Cash on Delivery</option>
-                                </select>
+                                    </tbody>
+                                </table>
                             </div>
-                        <!-- Submit Button -->
-                        <div class="col-12 text-center">
-                            <button type="submit" class="btn btn-primary w-50">Submit</button>
                         </div>
 
-                    </div>
+                        <div class="card shadow p-3 mb-3 bg-body-tertiary rounded">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Select Payment Type</label>
+                                    <select class="form-control" required name="paymentType">
+                                        <option value="">--Select--</option>
+                                        <option value="ONLINE">Online Payment</option>
+                                        <option value="COD">Cash on Delivery</option>
+                                    </select>
+                                </div>
 
+                                <!-- Submit Button -->
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary w-50">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-    </form>
         </div>
     </div>
-
-
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

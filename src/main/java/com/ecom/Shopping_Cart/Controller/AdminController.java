@@ -114,7 +114,7 @@ private ProductOrderService productOrderService;
     }
 
     @GetMapping("/products")
-    public String loadViewProduct(Model m,@RequestParam(defaultValue = "") String ch,@RequestParam(defaultValue = "0",name="pageNo") Integer page,@RequestParam(defaultValue = "2",name="pageSize") Integer size){
+    public String loadViewProduct(Model m,@RequestParam(defaultValue = "") String ch,@RequestParam(defaultValue = "0",name="pageNo") Integer page,@RequestParam(defaultValue = "5",name="pageSize") Integer size){
 //        List<Product> products=null;
 //        if(ch!=null && ch.length()>0){
 //            products=productService.searchProduct(ch);
@@ -193,7 +193,7 @@ private ProductOrderService productOrderService;
 
 
     @GetMapping("/category")
-    public String category(Model model,@RequestParam(defaultValue = "0",name="pageNo") Integer page,@RequestParam(defaultValue = "3",name="pageSize") Integer size){
+    public String category(Model model,@RequestParam(defaultValue = "0",name="pageNo") Integer page,@RequestParam(defaultValue = "5",name="pageSize") Integer size){
 //        m.addAttribute("categories",categoryService.getAllCategory());
     Page<Category> categoryPage=categoryService.getAllActiveCategoryPagination(page,size);
         List<Category> categoryList = categoryPage.getContent();

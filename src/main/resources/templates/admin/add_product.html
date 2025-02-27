@@ -42,7 +42,7 @@
                                 <label>Category</label>
                                 <select class="form-control" name="category">
                                     <option> --select--</option>
-                                    <option th:each="category:${categories}" th:value="${category.id}" >[[${category.name}]]</option>
+                                    <option th:each="category:${categories}" th:value="${category.name}" >[[${category.name}]]</option>
 
                                 </select>
 

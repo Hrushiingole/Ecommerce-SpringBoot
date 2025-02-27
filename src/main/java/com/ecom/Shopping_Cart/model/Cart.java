@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 @Entity
 @NoArgsConstructor
@@ -22,6 +23,7 @@ public class Cart {
 
     @ManyToOne
     private Product product;
+
 
     private Integer quantity;
 

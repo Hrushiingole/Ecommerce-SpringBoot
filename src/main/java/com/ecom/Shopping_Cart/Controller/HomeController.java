@@ -75,7 +75,14 @@ public class HomeController {
 
 
     @GetMapping("/")
-    public String index() {
+    public String index(Model model) {
+        List<Category> categories = categoryService.getAllActiveCategory().stream().limit(6).toList();
+        List<Product> products=productService.getAllActiveProducts("").stream()
+                .sorted((p1,p2)-> Integer.compare(p2.getId(),p1.getId()))
+                .limit(8).toList();
+
+        model.addAttribute("categories",categories);
+        model.addAttribute("products",products);
 
 
         return "index";
@@ -91,7 +98,7 @@ public class HomeController {
 
     @GetMapping("/products")
     public String products(Model model, @RequestParam(value = "category",defaultValue ="" ) String category,
-                           @RequestParam(value = "pageNo",defaultValue = "0") Integer page,@RequestParam(value = "pageSize",defaultValue = "1") Integer pageSize){
+                           @RequestParam(value = "pageNo",defaultValue = "0") Integer page,@RequestParam(value = "pageSize",defaultValue = "4") Integer pageSize){
 
         List<Category> categories = categoryService.getAllActiveCategory();
         model.addAttribute("categories", categories);
@@ -131,7 +138,11 @@ public class HomeController {
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session)
             throws IOException {
-
+        boolean isExist=userService.getUserByEmail(user.getEmail())!=null;
+        if(isExist){
+            session.setAttribute("errorMsg","Email already exist");
+            return "redirect:/register";
+        }
         String imageName = file.isEmpty() ? "default.jpg" : file.getOriginalFilename();
         user.setProfileImage(imageName);
         UserDtls saveUser = userService.saveUser(user);
